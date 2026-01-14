@@ -35,7 +35,7 @@ These lemmas should include nouns, verbs and adjectives that are central to unde
 
 Your output should be structured in the following JSON format:
 {
-  "summary": "<Concise summary of the article in Serbian>",
+  "summary": "<Concise summary of the article in Russian>",
   "entities": ["<Entity1>", "<Entity2>", "..."],
   "study_lemmas": ["<Lemma1>", "<Lemma2>", "..."]
 """
