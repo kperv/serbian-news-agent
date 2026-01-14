@@ -1,8 +1,10 @@
+import os
+
 import feedparser
 from newspaper import Article
 from dotenv import load_dotenv
-import json
-import os
+
+from utils import save_to_cache
 
 VIJESTI_RSS = os.getenv("VIJESTI_RSS", "https://www.vijesti.me/rss")
 CACHE_FILE = os.getenv("CACHE_FILE", "article_cache.json")
@@ -45,19 +47,10 @@ def prepare_article():
     return article_data
 
 
-def save_to_cache(data):
-    """Saves the article dictionary to a local JSON file."""
-    with open(CACHE_FILE, "w", encoding="utf-8") as f:
-        # indent=4 makes it readable; ensure_ascii=False keeps Serbian characters (č, ć, etc.)
-        json.dump(data, f, indent=4, ensure_ascii=False)
-
-
 if __name__ == "__main__":
     article = prepare_article()
     if article:
         save_to_cache(article)
         print("Article Title:", article["title"])
         print("Article URL:", article["url"])
-        print(
-            "Article Text:", article["text"][:500], "..."
-        )  # Print first 500 characters
+        print("Article Text:", article["text"][:500], "...")

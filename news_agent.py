@@ -1,12 +1,13 @@
+import os
+from typing import Any
+
 from dotenv import load_dotenv
+from pydantic import BaseModel
 from langchain.agents import create_agent
 from langchain.messages import HumanMessage
-from pydantic import BaseModel
-from typing import Any
-import os
-import json
 
 from parse_news import prepare_article
+from utils import load_from_cache, save_to_cache
 
 load_dotenv()
 VIJESTI_RSS = os.getenv("VIJESTI_RSS", "https://www.vijesti.me/rss")
@@ -55,19 +56,14 @@ def analyze_article(news_agent: Any, article_text: str) -> ArticleInfo:
     return response["structured_response"]
 
 
-def load_from_cache():
-    """Loads data from the local JSON file if it exists."""
-    if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return None
-
-
 if __name__ == "__main__":
     article_info = load_from_cache()
     if article_info:
         news_agent = init_agent()
         analysis = analyze_article(news_agent, article_info["text"])
+        analysis_dict = analysis.model_dump()
+        article_info.update(analysis_dict)
+        save_to_cache(article_info)
 
         print("Article Title:", article_info["title"])
         print("Article URL:", article_info["url"])
