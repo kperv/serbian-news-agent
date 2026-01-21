@@ -1,10 +1,13 @@
 # Python-generated files
 __pycache__/
+.ruff_cache/
+.vscode/
 *.py[oc]
 build/
 dist/
 wheels/
 *.egg-info
+tmp/
 
 # Virtual environments
 .venv
